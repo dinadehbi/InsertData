@@ -80,28 +80,29 @@
 </head>
 </head>
 <body>
-    <?php
+<?php
     $display = $display2 = "";
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $servername = "localhost";
     $username = "root";
-    $ps = "";
+    $password = ""; // This should be your actual password
     $dbname = "ana";
-    $tablename = "form2";
+    $tablename = "Form";
+
     $fname = $_POST["fname"];
     $lname = $_POST["lname"];
     $email = $_POST["email"];
-    $password = $_POST["password"];
+    
     try {
-        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $ps);
-        // set the PDO error mode to exception
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "INSERT INTO $tablename (Firstname, Lastname, Email, Password)
-        VALUES ('$fname', '$lname', '$email', '$password')";
+
+        $sql = "INSERT INTO $tablename (`Firstname`, `Lastname`, `Email`) VALUES ('$fname', '$lname', '$email')";
         $conn->exec($sql);
         $display = "New record created successfully";
       } catch(PDOException $e) {
-        $display2 = "Ereur " . $e->getMessage();
+        $display2 = "Erreur " . $e->getMessage(); 
       }
       $conn = null;
     }
@@ -125,11 +126,7 @@
         <input type="email" name="email" placeholder="entre your Email Addresse"  id="email" reaquired>
         </div>
         <br>
-        <div>
-        <label>Password:</label>
-        <input type="password" name="password" placeholder="enter password" reaquired>
-        </div>
-        <br>
+      
         <button type="submit" name="submit">Insert Data</button>
         <br><br>
         <span id="span1"><?php echo $display?></span>
